@@ -20,7 +20,7 @@ var send_message_queue = function(data, callback){
 app.use(bodyParser.json());
 
 app.get('/api/tasks/:key', function (req, res) {
-  const sequelize = new Sequelize('mysql://root@mysql/db');
+  const sequelize = new Sequelize('mysql://root@mysql/db', {logging: false});
   var model = sequelize.import("models/task.js");
   model.findOne({where: {key: req.params.key}}).then(task => {
     if(task != undefined){

@@ -23,7 +23,7 @@ server.use(restify.plugins.queryParser());
 server.use(restify.plugins.bodyParser());
 
 server.get('/api/tasks/:key', function (req, res, next) {
-  const sequelize = new Sequelize('mysql://root@mysql/db');
+  const sequelize = new Sequelize('mysql://root@mysql/db', {logging: false});
   var model = sequelize.import("models/task.js");
   model.findOne({where: {key: req.params.key}}).then(task => {
     if(task != undefined){
