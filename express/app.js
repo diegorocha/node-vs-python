@@ -23,6 +23,7 @@ app.get('/api/tasks/:key', function (req, res) {
   const sequelize = new Sequelize('mysql://root@mysql/db', {logging: false});
   var model = sequelize.import("models/task.js");
   model.findOne({where: {key: req.params.key}}).then(task => {
+    sequelize.close()
     if(task != undefined){
       res.status(200).send(task);
     }else{
