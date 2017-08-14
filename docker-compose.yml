@@ -14,6 +14,12 @@ services:
       - RABBITMQ_DEFAULT_PASS=pass
       - RABBITMQ_DEFAULT_USER=user
       - RABBITMQ_DEFAULT_VHOST=vhost
+  mysql:
+    image: "mysql"
+    networks:
+      - nvf-net
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
   flask:
     image: "python:2.7-alpine"
     networks:
@@ -22,6 +28,7 @@ services:
       - "5000:5000"
     links:
       - rabbit
+      - mysql
     volumes:
       - ./flask:/usr/src/app
     working_dir:
@@ -36,6 +43,7 @@ services:
       - "8000:8000"
     links:
       - rabbit
+      - mysql
     volumes:
       - ./express:/usr/src/app
     working_dir:
@@ -50,6 +58,7 @@ services:
       - "8080:8080"
     links:
       - rabbit
+      - mysql
     volumes:
       - ./restify:/usr/src/app
     working_dir:
