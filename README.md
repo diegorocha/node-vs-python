@@ -47,5 +47,5 @@ ab -p post-data -T application/json -c 10 -n 2000 http://localhost:8080/api/task
 Com base nos testes superficiais realizados com o ab obtivemos o seguinte ranking de desempenho:
 
 1. Nodejs + Restify
-+ Nodejs + Express
-+ Python + Flask
+2. Nodejs + Express
+3. Python + Flask
