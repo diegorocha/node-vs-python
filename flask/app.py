@@ -1,9 +1,18 @@
 from json import dumps
 from flask import Flask
+from models import Task
 from flask import request
+from flask.json import jsonify
+from db import db_session, engine
+from sqlalchemy.orm import sessionmaker
 from pika import BlockingConnection, ConnectionParameters, PlainCredentials
 
 app = Flask(__name__)
+
+
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    db_session.remove()
 
 
 def send_message_queue(data):
@@ -22,6 +31,16 @@ def hello():
         send_message_queue(data)
         return '', 201
     return '{"error": "foo is required"}', 400
+
+
+@app.route('/api/tasks/<key>', methods=['GET'])
+def get_task(key=None):
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    task = session.query(Task).filter(Task.key == key).first()
+    if task:
+        return jsonify(id=task.id, key=task.key, value=task.value)
+    return '', 404
 
 
 if __name__ == "__main__":
