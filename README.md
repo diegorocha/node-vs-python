@@ -1,13 +1,18 @@
 # Node vs Python
 
-Esse repositório tem como objetivo server de um mini benchmark para comparar o desempenho de uma pequena API que deve validar um json e salvar numa fila do RabbitMQ
+Esse repositório tem como objetivo server de um mini benchmark para comparar o desempenho de uma pequena API que deve validar um json e salvar numa fila do RabbitMQ e fazer consultas num banco MySQL.
 
-## Endpoint
+## Endpoints
 
 ```
 POST /api/tasks
 ```
 As diferentes aplicações recebem o json enviado nesse endpoint, validam seu conteúdo (o json deve possuir a chave "foo") e enviam o json inteiro para o RabbitMQ, retornando o status 201 em caso de sucesso e 400 em caso de json inválido.
+
+```
+GET /api/tasks/<key>
+```
+As diferentes aplicações consultam o banco mysql através do conteúdo da chave key. O dado é transformado em json e retornado. Caso key não seja encontrado é retornado 404.
 
 ## Aplicações
 
@@ -32,7 +37,7 @@ Usuário: user
 Senha: pass
 ```
 
-Depois, podemos usar o aplicativo [ab](https://httpd.apache.org/docs/2.4/programs/ab.html) para testar as diferentes versões com uma carga paralela de requisições.
+Depois, podemos usar o aplicativo [ab da Apache](https://httpd.apache.org/docs/2.4/programs/ab.html) para testar as diferentes versões com uma carga paralela de requisições.
 
 Os comandos abaixo enviam 2000 requisições (com dez paralelas por vez) para cada app.
 
