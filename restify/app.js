@@ -1,5 +1,7 @@
 var restify = require('restify');
 
+const Sequelize = require('sequelize');
+
 var amqp = require('amqplib/callback_api');
 
 var send_message_queue = function(data, callback){
@@ -19,6 +21,21 @@ var server = restify.createServer();
 server.use(restify.plugins.acceptParser(server.acceptable));
 server.use(restify.plugins.queryParser());
 server.use(restify.plugins.bodyParser());
+
+server.get('/api/tasks/:key', function (req, res, next) {
+  const sequelize = new Sequelize('mysql://root@mysql/db');
+  var model = sequelize.import("models/task.js");
+  model.findOne({where: {key: req.params.key}}).then(task => {
+    if(task != undefined){
+      res.send(200, task);
+      next();
+    }else{
+      res.send(404);
+      next();
+    }
+  });
+});
+
 
 server.post('/api/tasks', function(req, res, next) {
   var data = req.body;
